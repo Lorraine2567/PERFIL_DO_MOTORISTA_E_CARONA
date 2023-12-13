@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick-theme.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
+</head>
+
+<body>
+    <p style="text-align: center;">Perfil da Carona</p>
+
+
+    <div class="profile-info-container">
+        <img src="https://th.bing.com/th/id/OIP.UGjzY5HsmlT63NHe0uxoBwHaFa?pid=ImgDet&rs=1" alt="Foto do Motorista">
+        <br>
+        <label for="name">Nome:</label>
+        <span id="name">José Carlos</span>
+        <br>
+        <label for="placa">Placa:</label>
+        <span id="placa">ABC-1234</span>
+        <br>
+        <label for="rating">Avaliação:</label>
+        <span id="rating">4.5</span>
+    </div>
+
+    </div class="profile-info-container">
+
+
+    <main>
+        <h1 style="text-align: center;">Viagens antigas da carona</h1>
+        <div class="search-container">
+            <i class="fa fa-search"></i>
+            <input type="text" id="search-input" placeholder="Pesquisar caronas" autocomplete="off" />
+        </div>
+        <div class="card-container" id="card-container">
+        </div>
+
+    </main>
+    <script type="text/javascript" src="viagens.js"></script>
+</body>
+
+</html>

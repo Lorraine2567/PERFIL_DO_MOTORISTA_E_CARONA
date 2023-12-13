@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Me Leva - Carona Universitária PUC Minas São Gabriel</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #614fff;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        .profile-container {
+            width: 80%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-info {
+            text-align: center;
+        }
+
+        .profile-info img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        span {
+            display: inline-block;
+        }
+
+        .rating-container {
+            margin-top: 20px;
+        }
+
+        .rating-label {
+            font-weight: bold;
+        }
+
+        .rating-stars {
+            font-size: 24px;
+            margin-top: 10px;
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+
+        .previous-comments {
+            margin-top: 20px;
+        }
+
+        .previous-comments h3 {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        footer {
+            background-color: #614fff;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Me Leva - Carona Universitária PUC Minas São Gabriel</h1>
+    </header>
+
+    <div class="profile-container">
+        <h2>Perfil do Motorista</h2>
+        <div class="profile-info">
+            <img src="https://th.bing.com/th/id/OIP.XAzyeATBhrH3iUZVg_XjWQHaEK?pid=ImgDet&w=1920&h=1080&rs=1"
+                alt="Foto da Carona">
+            <br>
+            <label for="name">Nome:</label>
+            <span id="name">José Carlos</span>
+            <br>
+            <label for="placa">Placa:</label>
+            <span id="placa">ABC-1234</span>
+            <br>
+            <label for="rating">Avaliação:</label>
+            <span id="rating">0</span>
+        </div>
+
+        <div class="rating-container">
+            <div class="rating-container">
+                <label class="rating-label" for="comment">Comentário:</label>
+                <textarea class="comment-input" id="comment" rows="4"
+                    placeholder="Deixe um comentário para o motorista"></textarea>
+
+                <label class="rating-label" for="stars">Avaliação (1-5 estrelas):</label>
+                <div class="rating-stars" id="stars">
+                    <span class="star" data-rating="1">★</span>
+                    <span class="star" data-rating="2">★</span>
+                    <span class="star" data-rating="3">★</span>
+                    <span class="star" data-rating="4">★</span>
+                    <span class="star" data-rating="5">★</span>
+                </div>
+
+                <button onclick="adicionarComentario()">Enviar Comentário</button>
+            </div>
+
+            <div class="previous-comments" id="comments">
+                <h3>Veja Comentários Anteriores sobre o Motorista</h3>
+            </div>
+        </div>
+
+
+        <script>
+            const stars = document.querySelectorAll('.star');
+            const commentInput = document.getElementById('comment');
+            const commentsSection = document.getElementById('comments');
+            const ratingSpan = document.getElementById('rating');
+
+            let selectedRating = 0;
+            let totalStars = 0;
+            let totalRatings = 0;
+
+            stars.forEach(star => {
+                star.addEventListener('mouseover', () => {
+                    const rating = parseInt(star.getAttribute('data-rating'));
+                    highlightStars(rating);
+                });
+
+                star.addEventListener('mouseout', () => {
+                    highlightStars(selectedRating);
+                });
+
+                star.addEventListener('click', () => {
+                    selectedRating = parseInt(star.getAttribute('data-rating'));
+                    highlightStars(selectedRating);
+                });
+            });
+
+            function highlightStars(rating) {
+                stars.forEach(star => {
+                    const starRating = parseInt(star.getAttribute('data-rating'));
+                    if (starRating <= rating) {
+                        star.style.color = 'gold';
+                    } else {
+                        star.style.color = 'black';
+                    }
+                });
+            }
+
+            function adicionarComentario() {
+                const comentario = commentInput.value;
+                if (comentario && selectedRating > 0) {
+
+                    // Busca os comentários anteriores
+                    const comentariosAnteriores = JSON.parse(localStorage.getItem("comentarios"));
+
+                    const novoComentario = {
+                        rating: selectedRating,
+                        description: comentario,
+                    };
+                    const todosComentarios = [...comentariosAnteriores, novoComentario];
+                    localStorage.setItem("comentarios", JSON.stringify(todosComentarios));
+                    
+                    commentInput.value = ''; // Limpa o input
+                    resetStars(); // Limpa as estrelas
+                    buscaComentarios() // 
+                } else {
+                    alert('Por favor, escolha uma avaliação e deixe um comentário.');
+                }
+            }
+
+            function resetStars() {
+                selectedRating = 0;
+                highlightStars(selectedRating);
+            }
+
+            function buscaComentarios() {
+                // Funçaõ que busca os comentários do localStorage e popula na DOM
+                const comentarios = JSON.parse(localStorage.getItem("comentarios") || "[]")
+                if(comentarios && comentarios.length) {
+                    commentsSection.innerHTML = "<h3>Veja Comentários Anteriores sobre o Motorista</h3>" // Limpa a seção de comentários
+                    comentarios.forEach((comentario) => {
+                        const novoComentario = document.createElement('p');
+                        novoComentario.innerHTML = `Avaliação: ${comentario.rating} <br> ${comentario.description}`;
+                        commentsSection.appendChild(novoComentario);
+
+                        totalStars += comentario.rating;
+                        totalRatings += 1;
+                        const averageRating = totalStars / totalRatings;
+                        ratingSpan.textContent = averageRating.toFixed(1);
+                    })
+                } else {
+                    // Se não existir a estrutura de comentários ela é criada como um array vazio
+                    localStorage.setItem("comentarios", JSON.stringify([]));
+                }
+            }
+            buscaComentarios() // Executa a função pela primeira vez para popular com os comentários anteriores
+        </script>
+</body>
+
+</html>
